@@ -13,29 +13,20 @@ const openai = axios.create({
     headers: {Authorization: `Bearer ${popclip.options.apikey}`}
 });
 const message = popclip.input.text
-// extract the prefix from the commit message, e.g. [feat] or [fix]
-const prefixMatch = message.match(/^\[.*\]/);
-let prefix = '';
-// extract the commit message body
-let strippedMessage = message;
-if (prefixMatch && prefixMatch[0]) {
-    prefix = prefixMatch[0];
-    strippedMessage = message.replace(prefix, '').trim();
-}
 
 // use the GPT-3 model (note - can change/add other params here)
 const data = {
     "model": "text-davinci-003",
-    "prompt": "Improve this git commit messageImprove this git commit message:\n" + strippedMessage,
-    "temperature": 0,
-    "max_tokens": 100,
+    "prompt": "Improve this git commit message, don't modify prefix start from [ to ]:" + message,
+    "temperature": 0.8,
+    "max_tokens": 256,
     "top_p": 1,
-    "frequency_penalty": 0.2,
+    "frequency_penalty": 0,
     "presence_penalty": 0
-};
+}
 
 // send query to OpenAI's `completions` service
 const response = await openai.post('completions', data);
 // return the prefix + the improved commit message
-const result = prefix + ' ' + response.data.choices[0].text;
+const result = response.data.choices[0].text;
 return result;

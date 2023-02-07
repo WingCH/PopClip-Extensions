@@ -14,9 +14,14 @@ const openai = axios.create({
 });
 const message = popclip.input.text
 // extract the prefix from the commit message, e.g. [feat] or [fix]
-const prefix = message.match(/^\[.*\]/)[0];
+const prefixMatch = message.match(/^\[.*\]/);
+let prefix = '';
 // extract the commit message body
-const strippedMessage = message.replace(prefix, '').trim();
+let strippedMessage = message;
+if (prefixMatch && prefixMatch[0]) {
+    prefix = prefixMatch[0];
+    strippedMessage = message.replace(prefix, '').trim();
+}
 
 // use the GPT-3 model (note - can change/add other params here)
 const data = {

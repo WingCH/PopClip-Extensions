@@ -29,4 +29,4 @@ const data = {
 const response = await openai.post('completions', data);
 // return the prefix + the improved commit message
 const result = response.data.choices[0].text;
-return result;
+return result.replace(/\r?\n/g, '');

@@ -13,11 +13,23 @@ const openai = axios.create({
     headers: {Authorization: `Bearer ${popclip.options.apikey}`}
 });
 const message = popclip.input.text
+let prompt = '';
+// three case
+// 1. if the message is included prefix with [prefix], set prompt as `Improve this git commit message`
+// 2. if the message is start with '//', set prompt as `Improve this code comment`
+// 3. otherwise, set prompt as  `Help me generate code comment, keep it as short as possible`
+if (message.startsWith('[')) {
+    prompt = `Improve this git commit message, don't modify prefix start from [ to ]: ${message}`;
+} else if (message.startsWith('//')) {
+    prompt = `Improve this code comment: ${message}`;
+} else {
+    prompt = `Help me generate code comment, keep it as short as possible: ${message}`;
+}
 
 // use the GPT-3 model (note - can change/add other params here)
 const data = {
     "model": "text-davinci-003",
-    "prompt": "Improve this git commit message, don't modify prefix start from [ to ]:" + message,
+    "prompt": prompt,
     "temperature": 0.8,
     "max_tokens": 256,
     "top_p": 1,

@@ -20,7 +20,7 @@ const data = {
     "messages": [
         {
             "role": "system",
-            "content": "You are a helpful development assistant who helps me with the following questions, give the answer directly without any other description, each of the following cases is independent and should not interfere with each other."
+            "content": "You are a helpful development assistant who helps me with the following questions,  do not write any explanations or other words, just reply with the answer, each of the following cases is independent and should not interfere with each other"
         },
         {
             "role": "user",
